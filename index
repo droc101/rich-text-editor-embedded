@@ -1,0 +1,127 @@
+<html>
+<head>
+	<link href="favicon.png" rel="icon" type="image/x-icon" />
+	<title id="title">RichText Embedded</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" /><script>
+  function changeFont(font) {
+  document.execCommand('fontName', false, font.value);
+}
+      
+      function changeSize(font) {
+  	document.execCommand("fontSize", false, font.value);
+        font.value = "f";
+}
+
+      function setColor() {
+
+        document.execCommand("foreColor", false, document.getElementById('color').value);
+      }
+      function save() {
+        var a = document.body.appendChild(
+        document.createElement("a")
+    );
+a.download = document.getElementById('name').value;
+a.href = "data:text/html," + document.getElementById("document").innerHTML;
+
+        a.click();
+      }
+      
+      function onFileLoad(elementId, event) {
+    document.getElementById(elementId).innerHTML = event.target.result;
+}
+
+function onChooseFile(event, onLoadFileHandler) {
+    if (typeof window.FileReader !== 'function')
+        throw ("The file API is not supported by this browser.");
+    let input = event.target;
+    if (!input)
+        throw ("This browser does not support the event object.");
+    if (!input.files)
+        throw ("This browser does not support the file input.");
+    if (!input.files[0])
+        return undefined;
+    let file = input.files[0];
+    let fr = new FileReader();
+    fr.onload = onLoadFileHandler;
+    fr.readAsText(file);
+}
+
+      function justify(obj) {
+        if (obj.value == "l") {
+          document.execCommand("justifyLeft");
+        }else if (obj.value == "c") {
+          document.execCommand("justifyCenter");
+        }else if (obj.value == "r") {
+          document.execCommand("justifyRight");
+        }
+        obj.value = "n"
+      }
+
+      function styles(body) {
+        document.execCommand('formatBlock', false, body.value);
+        body.value = 's';
+      }
+      
+      function indents(body) {
+        if (body.value == 'in') {
+          document.execCommand('indent');
+        }else if (body.value == 'out') {
+          document.execCommand('outdent');
+        }
+        body.value = 'i';
+      }
+  function preview() {
+      
+        childWindow = window.open('','childWindow','location=yes, menubar=yes, toolbar=yes');//open a window
+        childWindow.document.open();//make it a document
+        childWindow.document.write('<html><head><title>Print Preview</title></head><body style="background-color:#eee;overflow:scroll;"><center><div style="width:8.5in;height:11in;background-color: #fff;border:1px solid #ccc; padding:1in;" align="left">');//add the html's starting tags
+        childWindow.document.write(document.getElementById('document').innerHTML);//add the textarea
+        childWindow.document.write('</div></center></body></html>');//close the html
+        //childWindow.print();//print it and wait for completion
+        //childWindow.document.close();//close the document
+        //childWindow.close();//close the window
+  }
+
+  </script>
+	<style type="text/css">button {
+    padding: 5px;
+    }
+    select {
+       	padding: 5px; 
+    }
+    input {
+      padding:5px;
+    }
+     input[type=color] {
+       height: 30px;
+       width: 30px;
+      }
+      body {
+        background-color: #eee;
+        margin: 0px;
+        /*overflow-x: hidden;*/
+      }
+      #document {
+        background-color: #fff;
+		overflow:scroll;
+      }
+      .material-icons {
+        font-size: 17px;
+      }
+	</style>
+</head>
+<body>
+<center>
+<div class="wrapper" style="width:640px;height:480px;overflow:hidden;">
+<div style="background:#fff;padding:5px 10px;border-bottom:1px solid #999;position:fixed;top:0;left:0;right:0;width:640px;"><input id="name" title="Document Title" type="text" value="Untitled.html" /><button onclick="save()">Download</button><input onchange="onChooseFile(event, onFileLoad.bind(this, &quot;document&quot;))" title="Open File" type="file" /><br />
+<button onclick="document.execCommand('undo');"><i class="material-icons">undo</i></button><button onclick="document.execCommand('redo');"><i class="material-icons">redo</i></button><button onclick="document.execCommand('bold',false,null);"><i class="material-icons">format_bold</i></button><button onclick="document.execCommand('underline',false,null);"><i class="material-icons">format_underline</i></button><button onclick="document.execCommand('italic',false,null);"><i class="material-icons">format_italic</i></button><select id="select_font" onchange="changeFont(this);"><option disabled="disabled" selected="selected" value="f">Font</option><option value="Arial">Arial</option><option value="Sans Serif">Sans Serif</option><option value="Comic Sans MS">Comic Sans MS</option><option value="Times New Roman">Times New Roman (Default)</option><option value="Courier New">Courier New</option><option value="Verdana">Verdana</option><option value="Trebuchet MS">Trebuchet MS</option><option value="Arial Black">Arial Black</option><option value="Impact">Impact</option><option value="Bookman">Bookman</option><option value="Garamond">Garamond</option><option value="Palatino">Palatino</option><option value="Georgia">Georgia</option></select><select onchange="changeSize(this);"><option disabled="disabled" selected="selected" value="f">Font Size</option><option value="1">Small</option><option value="3">Normal</option><option value="5">Large</option><option value="7">X Large</option></select><input id="color" onchange="setColor()" title="Font Color" type="color" /><select onchange="justify(this);"><option disabled="disabled" selected="selected" value="n">Justify</option><option value="l">Left</option><option value="c">Center</option><option value="r">Right</option></select><select onchange="indents(this);"><option disabled="disabled" selected="selected" value="i">Indents</option><option value="in">Indent</option><option value="out">Outdent</option></select></div>
+
+<div align="left" autofocus="" contenteditable="" id="document" style="width:640px;;height:400px;padding:0px;padding:10px;border:1px solid #ccc;position:fixed;top:75;left:0;right:0;">
+<p>&nbsp;</p>
+</div>
+</div>
+</center>
+
+<p><a href="https://droc101.github.io" style="position:absolute;top:470;left:540;">droc101.github.io</a></p>
+</body>
+</html>
